@@ -35,10 +35,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
+      # No `version` input: the action reads the exact pnpm from the
+      # `packageManager` field in package.json, so CI and local development
+      # cannot drift onto different majors. They did once, and pnpm 11 rejected
+      # the build-script config that pnpm 10 had accepted.
       - name: Install pnpm
         uses: pnpm/action-setup@v6
-        with:
-          version: 11
 
       - name: Install Node.js
         uses: actions/setup-node@v7

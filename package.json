@@ -22,8 +22,5 @@
   "dependencies": {
     "marked": "^15.0.0"
   },
-  "pnpm": {
-    "ignoredBuiltDependencies": ["esbuild"],
-    "onlyBuiltDependencies": ["esbuild"]
-  }
+  "packageManager": "pnpm@11.0.8"
 }

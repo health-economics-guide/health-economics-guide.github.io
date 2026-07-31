@@ -1,2 +1,7 @@
+# esbuild's install script links the prebuilt binary for the current platform,
+# so Vite cannot run without it. pnpm 11 blocks dependency build scripts unless
+# they are allowed here, and on first install it writes a placeholder string
+# that fails every later `pnpm install --frozen-lockfile` until set to a real
+# boolean — which is exactly how the first CI run on pnpm 11 broke.
 allowBuilds:
-  esbuild: set this to true or false
+  esbuild: true
