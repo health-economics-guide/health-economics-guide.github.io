@@ -1,3 +1,15 @@
+# Build the static site and publish it to GitHub Pages.
+#
+# Follows https://svelte.dev/docs/kit/adapter-static#GitHub-Pages, with one
+# deliberate difference: that example sets BASE_PATH to the repository name,
+# which is correct for a project site served from user.github.io/repo. This is
+# an organisation root site served from the domain root, so BASE_PATH stays
+# unset and `paths.base` resolves to '' — see svelte.config.js.
+#
+# Requires Settings -> Pages -> Source to be set to "GitHub Actions". With the
+# default "Deploy from a branch", Jekyll publishes the README instead and this
+# workflow's artifact is built, uploaded, and then ignored.
+
 name: Deploy to GitHub Pages
 
 on:
@@ -20,26 +32,33 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
         with:
-          version: 10
+          version: 11
 
-      - uses: actions/setup-node@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
 
-      - run: pnpm install --frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-      - run: pnpm build
+      - name: Build
+        run: pnpm build
 
-      - uses: actions/configure-pages@v5
+      - name: Configure Pages
+        uses: actions/configure-pages@v6
 
-      - uses: actions/upload-pages-artifact@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
         with:
-          path: build
+          path: build/
 
   deploy:
     needs: build
@@ -48,5 +67,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v5
