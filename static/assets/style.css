@@ -23,8 +23,6 @@
     /* The reading column's measure. Roughly 68 characters at the base size —
        long enough for the book's dense sentences, short enough to track. */
     --measure: 44rem;
-    /* Sidebar width. Wide enough for "Pandemic and Emergency Preparedness". */
-    --aside-width: 19rem;
     --header-height: 4.5rem;
 }
 
@@ -65,16 +63,17 @@ body {
     -webkit-text-size-adjust: 100%;
 }
 
-/* The grail layout: a full-width header, a contents sidebar, the reading
-   column, and a footer. The right aside is unused — this is a book, and a
-   second rail would compete with the prose — so the grid is three rows. */
+/* The grail layout, reduced to a single column: a full-width header, the
+   reading column, and a footer. Neither aside is used — a book does not need a
+   rail competing with the prose, and navigation lives in the header, the
+   contents page, and the previous/next links at the foot of each chapter. */
 .grail-layout.site {
     display: grid;
-    grid-template-columns: var(--aside-width) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
-        "header header"
-        "aside  main"
-        "footer footer";
+        "header"
+        "main"
+        "footer";
     min-height: 100vh;
 }
 
@@ -91,12 +90,6 @@ body {
     padding: var(--lily-space-sm) var(--lily-space-lg);
     background-color: var(--color-base-200);
     border-bottom: 1px solid var(--lily-border);
-}
-
-.grail-layout-left-aside.site-aside {
-    grid-area: aside;
-    border-right: 1px solid var(--lily-border);
-    background-color: var(--color-base-100);
 }
 
 .grail-layout-center-main.site-main {
@@ -174,91 +167,11 @@ body {
     gap: var(--lily-space-sm);
 }
 
-/* --- Contents sidebar ------------------------------------------------------ */
-
-.site-contents {
-    position: sticky;
-    top: var(--header-height);
-    max-height: calc(100vh - var(--header-height));
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    padding: var(--lily-space-lg) var(--lily-space-md);
-}
-
-/* On wide viewports the sidebar is always shown, so the disclosure control
-   would be noise; script keeps `open` in sync with the media query. */
-.site-contents-summary {
-    display: none;
-    cursor: pointer;
-    font-weight: 700;
-    padding: var(--lily-space-sm) 0;
-}
-
-.contents-nav.site-contents-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-}
-
-.site-contents-part {
-    font-size: 0.75em;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--lily-text-muted);
-    margin: var(--lily-space-lg) 0 var(--lily-space-xs);
-}
-
-.site-contents-part:first-child {
-    margin-top: 0;
-}
-
-/* Lily's ContentsLink is a <div class="contents-link"> wrapper; the theme's
-   generic `[class$="-link"]` rule would underline it as link text, which reads
-   badly for a 34-item list. Reset the wrapper and style the real anchor. */
-.contents-link.site-contents-item {
-    color: inherit;
-    text-decoration: none;
-}
-
-/* Two columns so a wrapped chapter title hangs under its own text rather than
-   under the chapter number. */
-.site-contents-item a {
-    display: grid;
-    grid-template-columns: 2.25em minmax(0, 1fr);
-    gap: 0.25em;
-    padding: 0.3rem var(--lily-space-sm);
-    border-radius: var(--lily-radius-sm);
-    color: var(--lily-text);
-    text-decoration: none;
-    font-size: 0.9375em;
-    line-height: 1.4;
-    border-left: 3px solid transparent;
-}
-
-/* Front matter has no chapter number, so it needs only one column. */
-.site-contents-item a:not(:has(.site-contents-number)) {
-    display: block;
-}
-
-.site-contents-item a:hover {
-    background-color: var(--color-base-200);
-}
-
-.site-contents-item a[aria-current="page"] {
-    background-color: var(--color-base-200);
-    border-left-color: var(--color-primary);
-    color: var(--color-primary);
-    font-weight: 600;
-}
-
+/* Chapter numbers, wherever a chapter is listed: the home page's part cards and
+   the contents page. Tabular figures keep the numbers in a straight edge. */
 .site-contents-number {
     font-variant-numeric: tabular-nums;
     color: var(--lily-text-muted);
-}
-
-.site-contents-item a[aria-current="page"] .site-contents-number {
-    color: inherit;
 }
 
 /* --- Article shell -------------------------------------------------------- */
@@ -880,33 +793,6 @@ body {
 /* --- Narrow viewports ------------------------------------------------------ */
 
 @media (max-width: 64rem) {
-    .grail-layout.site {
-        grid-template-columns: minmax(0, 1fr);
-        grid-template-areas:
-            "header"
-            "aside"
-            "main"
-            "footer";
-    }
-
-    .grail-layout-left-aside.site-aside {
-        border-right: 0;
-        border-bottom: 1px solid var(--lily-border);
-    }
-
-    /* Collapsed to a disclosure: the contents must not push the prose off
-       the first screen on a phone. */
-    .site-contents {
-        position: static;
-        max-height: none;
-        overflow: visible;
-        padding: var(--lily-space-sm) var(--lily-space-md);
-    }
-
-    .site-contents-summary {
-        display: list-item;
-    }
-
     .grail-layout-center-main.site-main {
         padding: var(--lily-space-lg) var(--lily-space-md) 3rem;
     }
@@ -935,7 +821,6 @@ body {
 
 @media print {
     .site-header,
-    .site-aside,
     .page-breadcrumb,
     .page-toc,
     .page-pagination,

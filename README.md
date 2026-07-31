@@ -24,7 +24,7 @@ health-economics-guide.github.io/
 │   │   ├── lily/                 Vendored Lily headless Svelte components
 │   │   └── helpers/              Vendored Lily ThemePicker and TextSizePicker
 │   └── routes/
-│       ├── +layout.svelte        Grail layout: header, contents sidebar, footer
+│       ├── +layout.svelte        Grail layout: header, reading column, footer
 │       ├── +page.svelte          Home
 │       ├── contents/             Full table of contents
 │       ├── chapters/[slug]/      One prerendered page per chapter
@@ -73,7 +73,7 @@ Chapters are discovered from the filenames, which carry the ordering (`03-07-ins
 
 The site uses the Lily Design System's Svelte headless components and its helper pickers, both vendored under `src/lib/`:
 
-- **Components** from [`lily-design-system-svelte-headless`](https://github.com/LilyDesignSystem): `GrailLayout` and its regions for the page frame, `ArticleLayout`, `ContentsNav`, `BreadcrumbNav`, `PaginationNav`, `SectionHeading`, `Card`, `Badge`, and `SkipLink`. They ship no CSS — every rule comes from the active theme plus `static/assets/style.css`.
+- **Components** from [`lily-design-system-svelte-headless`](https://github.com/LilyDesignSystem): `GrailLayout` and its header, main, and footer regions for the page frame, `ArticleLayout`, `ContentsNav`, `BreadcrumbNav`, `PaginationNav`, `SectionHeading`, `Card`, `Badge`, and `SkipLink`. They ship no CSS — every rule comes from the active theme plus `static/assets/style.css`.
 - **Helpers** from [`lily-design-system-svelte-helpers`](https://github.com/LilyDesignSystem): `ThemePicker` and `TextSizePicker` in the header. Both persist to `localStorage`, and the theme picker also honours `prefers-color-scheme` on a first visit.
 
 Readers can switch between seven Lily themes, including NHS England, UK Government Digital Service, and US Web Design System. Each theme file in `static/assets/themes/` is standalone: it declares its tokens and inlines the component CSS, so switching is a single stylesheet swap.

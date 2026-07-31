@@ -3,16 +3,13 @@
   import SkipLink from '$lib/lily/SkipLink.svelte';
   import GrailLayout from '$lib/lily/GrailLayout.svelte';
   import GrailLayoutTopHeader from '$lib/lily/GrailLayoutTopHeader.svelte';
-  import GrailLayoutLeftAside from '$lib/lily/GrailLayoutLeftAside.svelte';
   import GrailLayoutCenterMain from '$lib/lily/GrailLayoutCenterMain.svelte';
   import GrailLayoutBottomFooter from '$lib/lily/GrailLayoutBottomFooter.svelte';
-  import ContentsNav from '$lib/lily/ContentsNav.svelte';
-  import ContentsLink from '$lib/lily/ContentsLink.svelte';
   import ThemePicker from '$lib/helpers/ThemePicker.svelte';
   import TextSizePicker from '$lib/helpers/TextSizePicker.svelte';
-  import { PARTS, SOURCE_REPO } from '$lib/book';
+  import { SOURCE_REPO } from '$lib/book';
 
-  let { data, children } = $props();
+  let { children } = $props();
 
   const THEMES = [
     'light',
@@ -41,32 +38,6 @@
     { href: '/glossary/', label: 'Glossary' },
     { href: '/index/', label: 'Index' }
   ];
-
-  const frontMatter = $derived(data.toc.filter((chapter) => chapter.part === 0));
-
-  const parts = $derived(
-    PARTS.map((part) => ({
-      ...part,
-      chapters: data.toc.filter((chapter) => chapter.part === part.number)
-    }))
-  );
-
-  const currentSlug = $derived(page.params.slug ?? '');
-
-  /**
-   * The sidebar contents is a disclosure so that a phone is not handed 34 links
-   * before the prose. It renders open — a reader without JavaScript keeps the
-   * full contents — and collapses on mount only when the viewport is too narrow
-   * to show the sidebar alongside the text.
-   */
-  let contentsOpen = $state(true);
-  $effect(() => {
-    const wide = window.matchMedia('(min-width: 64rem)');
-    const sync = () => (contentsOpen = wide.matches);
-    sync();
-    wide.addEventListener('change', sync);
-    return () => wide.removeEventListener('change', sync);
-  });
 </script>
 
 <SkipLink href="#main" label="Skip to main content" />
@@ -105,52 +76,6 @@
       />
     </div>
   </GrailLayoutTopHeader>
-
-  <GrailLayoutLeftAside class="site-aside">
-    <details class="site-contents" bind:open={contentsOpen}>
-      <summary class="site-contents-summary">Contents</summary>
-
-      <ContentsNav label="Book contents" class="site-contents-nav">
-        {#each frontMatter as chapter (chapter.slug)}
-          <ContentsLink class="site-contents-item">
-            <a
-              href="/chapters/{chapter.slug}/"
-              aria-current={currentSlug === chapter.slug ? 'page' : undefined}
-            >
-              {chapter.title}
-            </a>
-          </ContentsLink>
-        {/each}
-
-        {#each parts as part (part.number)}
-          <h2 class="site-contents-part">Part {part.number} — {part.title}</h2>
-          {#each part.chapters as chapter (chapter.slug)}
-            <ContentsLink class="site-contents-item">
-              <a
-                href="/chapters/{chapter.slug}/"
-                aria-current={currentSlug === chapter.slug ? 'page' : undefined}
-              >
-                <span class="site-contents-number">{chapter.number}</span>
-                {chapter.title}
-              </a>
-            </ContentsLink>
-          {/each}
-        {/each}
-
-        <h2 class="site-contents-part">Reference</h2>
-        <ContentsLink class="site-contents-item">
-          <a href="/glossary/" aria-current={page.url.pathname === '/glossary/' ? 'page' : undefined}
-            >Glossary</a
-          >
-        </ContentsLink>
-        <ContentsLink class="site-contents-item">
-          <a href="/index/" aria-current={page.url.pathname === '/index/' ? 'page' : undefined}
-            >Index</a
-          >
-        </ContentsLink>
-      </ContentsNav>
-    </details>
-  </GrailLayoutLeftAside>
 
   <GrailLayoutCenterMain class="site-main" id="main">
     {@render children()}
