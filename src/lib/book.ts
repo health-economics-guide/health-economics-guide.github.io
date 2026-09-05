@@ -62,3 +62,6 @@ export const PARTS: Part[] = [
 
 /** Where the book's source lives, for "edit this page" and provenance links. */
 export const SOURCE_REPO = 'https://github.com/health-economics-guide/health-economics-guide';
+
+/** Where the Claude Code skills for this guide live, in the source repo. */
+export const SKILLS_REPO = `${SOURCE_REPO}/tree/main/skills`;

@@ -3,7 +3,7 @@
   import SectionHeading from '$lib/lily/SectionHeading.svelte';
   import Card from '$lib/lily/Card.svelte';
   import Badge from '$lib/lily/Badge.svelte';
-  import { PARTS, SOURCE_REPO } from '$lib/book';
+  import { PARTS, SOURCE_REPO, SKILLS_REPO } from '$lib/book';
 
   let { data } = $props();
 
@@ -93,6 +93,30 @@
       <li>
         <a href={SOURCE_REPO} rel="noopener">Source repository</a>
         — the markdown behind this site, its specification, and the contribution guide.
+      </li>
+    </ul>
+  </section>
+
+  <section class="page-section">
+    <SectionHeading
+      heading="Use with Claude"
+      subtitle="Two Claude Code skills teach an AI assistant to work with this guide."
+    />
+    <ul class="reference-list">
+      <li>
+        <a href="{SKILLS_REPO}/health-economics-guide-skill" rel="noopener">health-economics-guide</a>
+        <Badge type="info">readers</Badge>
+        — routes a question to the right chapter, answers grounded in the book's own text, runs
+        team workshops from a chapter's discussion questions, and applies the maturity model and
+        checklists to a reader's own organization.
+      </li>
+      <li>
+        <a href="{SKILLS_REPO}/health-economics-guide-maintainer-skill" rel="noopener"
+          >health-economics-guide-maintainer</a
+        >
+        <Badge type="info">maintainers</Badge>
+        — encodes the book's authoring, review, and cross-file consistency rules for anyone writing,
+        reviewing, or reorganizing chapters.
       </li>
     </ul>
   </section>
