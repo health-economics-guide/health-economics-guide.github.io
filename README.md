@@ -22,7 +22,7 @@ health-economics-guide.github.io/
 │   │   ├── ReferencePage.svelte  Shared layout for the glossary and the index
 │   │   ├── server/book.ts        Server-only: loads and parses the content
 │   │   ├── lily/                 Vendored Lily headless Svelte components
-│   │   └── helpers/              Vendored Lily ThemePicker and TextSizePicker
+│   │   └── helpers/              Vendored Lily PickerBar and its four pickers
 │   └── routes/
 │       ├── +layout.svelte        Grail layout: header, reading column, footer
 │       ├── +page.svelte          Home
@@ -74,7 +74,7 @@ Chapters are discovered from the filenames, which carry the ordering (`03-07-ins
 The site uses the Lily Design System's Svelte headless components and its helper pickers, both vendored under `src/lib/`:
 
 - **Components** from [`lily-design-system-svelte-headless`](https://github.com/LilyDesignSystem): `GrailLayout` and its header, main, and footer regions for the page frame, `ArticleLayout`, `ContentsNav`, `BreadcrumbNav`, `PaginationNav`, `SectionHeading`, `Card`, `Badge`, and `SkipLink`. They ship no CSS — every rule comes from the active theme plus `static/assets/style.css`.
-- **Helpers** from [`lily-design-system-svelte-helpers`](https://github.com/LilyDesignSystem): `ThemePicker` and `TextSizePicker` in the header. Both persist to `localStorage`, and the theme picker also honours `prefers-color-scheme` on a first visit.
+- **Helpers** from [`lily-design-system-svelte-helpers`](https://github.com/LilyDesignSystem): `PickerBar` in the header, composing `ThemePicker`, `LocalePicker`, `TextSizePicker`, and `SharePicker`. All three stateful pickers persist to `localStorage`; the theme picker also honours `prefers-color-scheme`, and the share picker offers copy-to-URL. The locale picker currently offers only English — it's wired up ready for translations, not doing anything yet.
 
 Readers can switch between seven Lily themes, including NHS England, UK Government Digital Service, and US Web Design System. Each theme file in `static/assets/themes/` is standalone: it declares its tokens and inlines the component CSS, so switching is a single stylesheet swap.
 

@@ -5,8 +5,7 @@
   import GrailLayoutTopHeader from '$lib/lily/GrailLayoutTopHeader.svelte';
   import GrailLayoutCenterMain from '$lib/lily/GrailLayoutCenterMain.svelte';
   import GrailLayoutBottomFooter from '$lib/lily/GrailLayoutBottomFooter.svelte';
-  import ThemePicker from '$lib/helpers/ThemePicker.svelte';
-  import TextSizePicker from '$lib/helpers/TextSizePicker.svelte';
+  import PickerBar from '$lib/helpers/PickerBar.svelte';
   import { SOURCE_REPO } from '$lib/book';
 
   let { children } = $props();
@@ -30,8 +29,6 @@
     'united-kingdom-government-digital-service': 'UK Government',
     'united-states-web-design-system': 'US Web Design System'
   };
-
-  const TEXT_SIZES = ['small', 'medium', 'large', 'x-large'];
 
   const siteLinks = [
     { href: '/contents/', label: 'Contents' },
@@ -58,23 +55,26 @@
       <a href={SOURCE_REPO} rel="noopener">Source</a>
     </nav>
 
-    <div class="site-controls">
-      <TextSizePicker
-        label="Text size"
-        sizes={TEXT_SIZES}
-        defaultValue="medium"
-        storageKey="health-economics-guide-text-size"
-      />
-      <ThemePicker
-        label="Theme"
-        themesUrl="/assets/themes/"
-        themes={THEMES}
-        themeLabels={THEME_LABELS}
-        defaultValue="light"
-        detectFromSystem
-        storageKey="health-economics-guide-theme"
-      />
-    </div>
+    <PickerBar
+      class="site-controls"
+      labels={{ theme: 'Theme', locale: 'Language', textSize: 'Text size', share: 'Share' }}
+      themesUrl="/assets/themes/"
+      themes={THEMES}
+      themeProps={{
+        themeLabels: THEME_LABELS,
+        defaultValue: 'light',
+        detectFromSystem: true,
+        storageKey: 'health-economics-guide-theme'
+      }}
+      locales={['en']}
+      localeProps={{ storageKey: 'health-economics-guide-locale' }}
+      textSizeProps={{ storageKey: 'health-economics-guide-text-size' }}
+      shareProps={{
+        copyLabel: 'Copy link',
+        copiedLabel: 'Copied!',
+        copyFailedLabel: 'Copy failed — copy the address bar instead'
+      }}
+    />
   </GrailLayoutTopHeader>
 
   <GrailLayoutCenterMain class="site-main" id="main">
