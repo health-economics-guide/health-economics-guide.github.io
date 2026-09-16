@@ -42,8 +42,8 @@
 <GrailLayout class="site">
   <GrailLayoutTopHeader class="site-header">
     <a class="site-brand" href="/">
+      <span class="site-brand-icon" aria-hidden="true">⚕</span>
       <span class="site-brand-title">Health Economics Guide</span>
-      <span class="site-brand-subtitle">A practical handbook of best practices</span>
     </a>
 
     <nav class="site-nav" aria-label="Site">

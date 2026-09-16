@@ -125,21 +125,23 @@ body {
 
 .site-brand {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: var(--lily-space-xs);
     text-decoration: none;
     color: inherit;
     margin-right: auto;
+}
+
+.site-brand-icon {
+    font-size: 1.25em;
+    line-height: 1;
+    color: var(--color-primary);
 }
 
 .site-brand-title {
     font-size: 1.0625em;
     font-weight: 700;
     letter-spacing: -0.01em;
-}
-
-.site-brand-subtitle {
-    font-size: 0.8125em;
-    color: var(--lily-text-muted);
 }
 
 .site-brand:hover .site-brand-title {
@@ -885,10 +887,6 @@ body {
 @media (max-width: 64rem) {
     .grail-layout-center-main.site-main {
         padding: var(--lily-space-lg) var(--lily-space-md) 3rem;
-    }
-
-    .site-brand-subtitle {
-        display: none;
     }
 }
 
