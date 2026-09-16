@@ -1,7 +1,6 @@
 <script lang="ts">
   import ArticleLayout from '$lib/lily/ArticleLayout.svelte';
   import SectionHeading from '$lib/lily/SectionHeading.svelte';
-  import Card from '$lib/lily/Card.svelte';
   import Badge from '$lib/lily/Badge.svelte';
   import { PARTS, SOURCE_REPO, SKILLS_REPO } from '$lib/book';
 
@@ -58,11 +57,12 @@
       subtitle="Five parts, {chapterCount} chapters. Any chapter can be read on its own — the night before the decision."
     />
 
-    <div class="part-grid">
+    <div class="part-list">
       {#each parts as part (part.number)}
-        <Card class="part-card" heading="Part {part.number} — {part.title}" headingLevel={3}>
-          <p class="part-card-tagline">{part.tagline}</p>
-          <ol class="part-card-chapters">
+        <div class="part-block">
+          <h3 class="part-block-heading">Part {part.number} — {part.title}</h3>
+          <p class="part-block-tagline">{part.tagline}</p>
+          <ol class="contents-chapters">
             {#each part.chapters as chapter (chapter.slug)}
               <li>
                 <a href="/chapters/{chapter.slug}/">
@@ -72,7 +72,7 @@
               </li>
             {/each}
           </ol>
-        </Card>
+        </div>
       {/each}
     </div>
   </section>
