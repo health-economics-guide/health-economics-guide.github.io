@@ -746,6 +746,17 @@ body {
     top: 100%;
 }
 
+/* The button and its icon span are both flex-centered (theme + button
+   rules), and that centers the SPAN correctly — but centering the box
+   isn't centering the glyph. U+27A4 "➤" sits high within this font
+   stack's line box (unlike ◑, 🌐, and "A", whose ink happens to fall
+   closer to their box centers), so even a perfectly centered span still
+   reads as an icon sitting near the top of its button. Nudge just the
+   ink down; em-based so it tracks the text-size picker's scale. */
+.share-picker-icon {
+    transform: translateY(0.14em);
+}
+
 /* --- Narrow viewports ------------------------------------------------------ */
 
 @media (max-width: 64rem) {
