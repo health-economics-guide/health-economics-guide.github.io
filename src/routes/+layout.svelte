@@ -10,23 +10,20 @@
 
   let { children } = $props();
 
-  const THEMES = [
-    'light',
-    'dark',
-    'nord',
-    'dracula',
-    'united-kingdom-national-health-service-england-for-patients',
-    'united-kingdom-government-digital-service',
-    'united-states-web-design-system'
-  ];
-
+  // Every theme slug title-cases to a readable label on its own (see
+  // ThemePicker's default labelFor) except the UK/US government and NHS
+  // ones, which read as a wall of words without a shorthand.
   const THEME_LABELS: Record<string, string> = {
-    light: 'Light',
-    dark: 'Dark',
-    nord: 'Nord',
-    dracula: 'Dracula',
-    'united-kingdom-national-health-service-england-for-patients': 'NHS England',
     'united-kingdom-government-digital-service': 'UK Government',
+    'united-kingdom-national-health-service-england-for-patients': 'NHS England',
+    'united-kingdom-national-health-service-england-for-practitioners':
+      'NHS England (Practitioners)',
+    'united-kingdom-national-health-service-scotland-for-patients': 'NHS Scotland',
+    'united-kingdom-national-health-service-scotland-for-practitioners':
+      'NHS Scotland (Practitioners)',
+    'united-kingdom-national-health-service-wales-for-patients': 'NHS Wales',
+    'united-kingdom-national-health-service-wales-for-practitioners':
+      'NHS Wales (Practitioners)',
     'united-states-web-design-system': 'US Web Design System'
   };
 
@@ -59,7 +56,6 @@
       class="site-controls"
       labels={{ theme: 'Theme', locale: 'Language', textSize: 'Text size', share: 'Share' }}
       themesUrl="/assets/themes/"
-      themes={THEMES}
       themeProps={{
         themeLabels: THEME_LABELS,
         defaultValue: 'light',
