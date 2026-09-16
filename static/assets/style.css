@@ -733,6 +733,19 @@ body {
     inset-inline-end: 0;
 }
 
+/* The theme's own .share-picker-status is in normal flow — a caption
+   line under the button — which is fine on its own, but it makes
+   .share-picker taller than its sibling picker wrappers (which have no
+   such line). .picker-bar centers its children on the cross axis, so
+   that extra height was pushing the share button, icon included, up
+   relative to the other three buttons. Take the status line out of
+   flow so every wrapper stays button-height and the row centers evenly. */
+.share-picker-status {
+    position: absolute;
+    inset-inline-end: 0;
+    top: 100%;
+}
+
 /* --- Narrow viewports ------------------------------------------------------ */
 
 @media (max-width: 64rem) {
