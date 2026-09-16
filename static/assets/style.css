@@ -722,12 +722,18 @@ body {
     gap: var(--lily-space-sm);
 }
 
-/* share-picker is the rightmost control in the bar, so the theme's
-   default left-anchored popup (inset-inline-start: 0, extending toward
-   the reading end) runs past the viewport's right edge from there.
-   Flip just this one to hang from its own end edge instead — using the
-   same logical property the theme sets, not a physical left/right,
-   so this cleanly overrides rather than re-creating the conflict above. */
+/* All four pickers sit in the right-hand cluster of a right-aligned
+   header, so the theme's default left-anchored popup (inset-inline-start:
+   0, extending toward the reading end) risks running past the
+   viewport's right edge from any of them — theme-picker most visibly,
+   since its list is now as wide as "NHS Scotland (Practitioners)" needs
+   across the full 45-theme catalog, and it isn't even the rightmost
+   button. Flip every popup to hang from its own end edge instead —
+   using the same logical property the theme sets, so this cleanly
+   overrides rather than re-creating the earlier left/right conflict. */
+.theme-picker-list,
+.locale-picker-list,
+.text-size-picker-list,
 .share-picker-list {
     inset-inline-start: auto;
     inset-inline-end: 0;
