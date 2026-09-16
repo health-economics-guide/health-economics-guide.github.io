@@ -2,14 +2,15 @@
     import type { Snippet } from "svelte";
 
     /**
-     * Default button glyph: U+27A4 BLACK RIGHTWARDS ARROWHEAD.
-     *
-     * An in-font arrow rather than a pictograph, matching the other helpers'
-     * rule: it renders in the page's own font on every platform and stays
-     * monochrome alongside theme-picker's ◑, locale-picker's 🌐 and
-     * text-size-picker's "A".
+     * Default button icon: a bundled SVG (outline right arrow), not a
+     * Unicode character. Reversed 2026-09-16 from the font-dependent-glyph
+     * convention (was U+27A4 BLACK RIGHTWARDS ARROWHEAD, exported as
+     * `BLACK_RIGHTWARDS_ARROWHEAD` — removed, not renamed). Maintainer-
+     * directed, following the outline-arrow icon already used at
+     * https://testingexamples.github.io/. A bundled SVG renders identically
+     * across every font stack; the other four picker icons moved to the
+     * same bundled-SVG convention the same day.
      */
-    export const BLACK_RIGHTWARDS_ARROWHEAD = "➤";
 
     /**
      * One destination in the share list.
@@ -68,7 +69,7 @@
          * the sheet; `"list"` always shows the list.
          */
         strategy?: ShareStrategy;
-        /** Replaces the default ➤ glyph inside the button. */
+        /** Replaces the default arrow icon inside the button. */
         children?: Snippet<[ChildArgs]>;
         /** Fires after a destination is chosen, with its `id`. */
         onShare?: (targetId: string, url: string) => void;
@@ -152,16 +153,22 @@
     function openList(focusLast = false): void {
         open = true;
         status = "";
+        // preventScroll stops the browser's default scroll-into-view: the
+        // list is positioned by CSS (see AGENTS/theme.md), and without a
+        // consumer override for a right-edge header it can render partly
+        // off-screen, and focusing an item then auto-scrolled the whole
+        // page -- which reads as the page jumping sideways the instant the
+        // picker opens.
         queueMicrotask(() => {
             const all = items();
-            (focusLast ? all[all.length - 1] : all[0])?.focus();
+            (focusLast ? all[all.length - 1] : all[0])?.focus({ preventScroll: true });
         });
     }
 
     function closeList(refocus = true): void {
         if (!open) return;
         open = false;
-        if (refocus) queueMicrotask(() => buttonEl?.focus());
+        if (refocus) queueMicrotask(() => buttonEl?.focus({ preventScroll: true }));
     }
 
     async function shareNatively(): Promise<boolean> {
@@ -196,11 +203,11 @@
         if (event.key === "ArrowDown") {
             event.preventDefault();
             if (!open) openList();
-            else items()[0]?.focus();
+            else items()[0]?.focus({ preventScroll: true });
         } else if (event.key === "ArrowUp") {
             event.preventDefault();
             if (!open) openList(true);
-            else items()[items().length - 1]?.focus();
+            else items()[items().length - 1]?.focus({ preventScroll: true });
         }
     }
 
@@ -209,7 +216,7 @@
         if (all.length === 0) return;
         const i = all.indexOf(document.activeElement as HTMLElement);
         const next = Math.min(Math.max((i < 0 ? 0 : i) + delta, 0), all.length - 1);
-        all[next]?.focus();
+        all[next]?.focus({ preventScroll: true });
     }
 
     function onListKeydown(event: KeyboardEvent): void {
@@ -224,12 +231,12 @@
                 break;
             case "Home":
                 event.preventDefault();
-                items()[0]?.focus();
+                items()[0]?.focus({ preventScroll: true });
                 break;
             case "End": {
                 event.preventDefault();
                 const all = items();
-                all[all.length - 1]?.focus();
+                all[all.length - 1]?.focus({ preventScroll: true });
                 break;
             }
             case "Escape":
@@ -245,7 +252,7 @@
                 // teleported the user to the page's first tab stop. From
                 // the button, the default Tab lands exactly where leaving
                 // the picker should.
-                buttonEl?.focus?.();
+                buttonEl?.focus?.({ preventScroll: true });
                 closeList(false);
                 break;
         }
@@ -303,9 +310,20 @@
         {#if children}
             {@render children({ open, url: currentUrl() })}
         {:else}
-            <span class="share-picker-icon" aria-hidden="true"
-                >{BLACK_RIGHTWARDS_ARROWHEAD}</span
+            <svg
+                class="share-picker-icon"
+                viewBox="0 0 16 16"
+                width="1.05rem"
+                height="1.05rem"
+                aria-hidden="true"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
             >
+                <path d="M2.5 8h11M9 3.5 13.5 8 9 12.5" />
+            </svg>
         {/if}
     </button>
 
