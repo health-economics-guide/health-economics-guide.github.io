@@ -704,6 +704,17 @@ body {
 
 /* --- Lily pickers ---------------------------------------------------------- */
 
+/* Every *-picker class below this point (button, icon, list, option,
+   share target/copy, status) already has a complete baseline in each
+   Lily theme file — see e.g. static/assets/themes/light.css's own
+   ":where(.theme-picker-list, .locale-picker-list, ...)" block. Adding
+   physical left/right rules here on top of the theme's logical
+   inset-inline-start ones over-constrains the popup's position and the
+   browser silently drops one of them — that's what made the locale
+   picker's dropdown balloon past the viewport edge and yank the whole
+   page sideways when it took focus. .picker-bar itself is the one thing
+   no theme styles, since it's PickerBar's own wrapper, not a Lily
+   component class. */
 .picker-bar {
     display: flex;
     flex-wrap: wrap;
@@ -711,175 +722,15 @@ body {
     gap: var(--lily-space-sm);
 }
 
-/* theme-picker, locale-picker, and text-size-picker share one contract:
-   an icon button that opens a role="listbox" positioned beneath it, with
-   the active option tracked via aria-activedescendant (data-active). */
-.theme-picker,
-.locale-picker,
-.text-size-picker {
-    position: relative;
-}
-
-.theme-picker-button,
-.locale-picker-button,
-.text-size-picker-button {
-    min-height: 2.25rem;
-    min-width: 2.25rem;
-    padding: 0.25rem 0.6rem;
-    background-color: var(--color-base-100);
-    border: 1px solid var(--lily-border-strong);
-    border-radius: var(--lily-radius-md);
-    color: var(--lily-text);
-    cursor: pointer;
-    font: inherit;
-    line-height: 1;
-}
-
-.theme-picker-button:hover,
-.locale-picker-button:hover,
-.text-size-picker-button:hover {
-    background-color: var(--color-base-300);
-}
-
-.theme-picker-list,
-.locale-picker-list,
-.text-size-picker-list {
-    position: absolute;
-    right: 0;
-    z-index: 30;
-    min-width: 12rem;
-    margin-top: 0.25rem;
-    padding: 0.25rem;
-    list-style: none;
-    background-color: var(--color-base-100);
-    border: 1px solid var(--lily-border-strong);
-    border-radius: var(--lily-radius-md);
-    box-shadow: var(--lily-shadow-md);
-    max-height: 60vh;
-    overflow-y: auto;
-}
-
-.theme-picker-option,
-.locale-picker-option,
-.text-size-picker-option {
-    padding: 0.35rem 0.6rem;
-    border-radius: var(--lily-radius-sm);
-    cursor: pointer;
-    font-size: 0.9375em;
-    white-space: nowrap;
-}
-
-.theme-picker-option:hover,
-.locale-picker-option:hover,
-.text-size-picker-option:hover {
-    background-color: var(--color-base-200);
-}
-
-.theme-picker-option[aria-selected="true"],
-.locale-picker-option[aria-selected="true"],
-.text-size-picker-option[aria-selected="true"] {
-    background-color: var(--color-primary);
-    color: var(--color-primary-content);
-}
-
-/* The listbox tracks its own roving highlight via data-active (the
-   aria-activedescendant pattern), which is separate from selection. */
-.theme-picker-option[data-active],
-.locale-picker-option[data-active],
-.text-size-picker-option[data-active] {
-    outline: 2px solid var(--lily-focus-ring);
-    outline-offset: -2px;
-}
-
-/* `hidden` on the list must beat the display rules above. */
-.theme-picker-list[hidden],
-.locale-picker-list[hidden],
-.text-size-picker-list[hidden] {
-    display: none;
-}
-
-/* share-picker is a real menu, not a listbox: its items are actual links
-   and a button that take focus directly, so they need their own
-   :focus-visible rather than the aria-activedescendant pattern above. */
-.share-picker {
-    position: relative;
-}
-
-.share-picker-button {
-    min-height: 2.25rem;
-    min-width: 2.25rem;
-    padding: 0.25rem 0.6rem;
-    background-color: var(--color-base-100);
-    border: 1px solid var(--lily-border-strong);
-    border-radius: var(--lily-radius-md);
-    color: var(--lily-text);
-    cursor: pointer;
-    font: inherit;
-    line-height: 1;
-}
-
-.share-picker-button:hover {
-    background-color: var(--color-base-300);
-}
-
+/* share-picker is the rightmost control in the bar, so the theme's
+   default left-anchored popup (inset-inline-start: 0, extending toward
+   the reading end) runs past the viewport's right edge from there.
+   Flip just this one to hang from its own end edge instead — using the
+   same logical property the theme sets, not a physical left/right,
+   so this cleanly overrides rather than re-creating the conflict above. */
 .share-picker-list {
-    position: absolute;
-    right: 0;
-    z-index: 30;
-    min-width: 12rem;
-    margin-top: 0.25rem;
-    padding: 0.25rem;
-    list-style: none;
-    background-color: var(--color-base-100);
-    border: 1px solid var(--lily-border-strong);
-    border-radius: var(--lily-radius-md);
-    box-shadow: var(--lily-shadow-md);
-}
-
-.share-picker-list[hidden] {
-    display: none;
-}
-
-.share-picker-target,
-.share-picker-copy {
-    display: block;
-    width: 100%;
-    padding: 0.35rem 0.6rem;
-    border: 0;
-    border-radius: var(--lily-radius-sm);
-    background: none;
-    color: inherit;
-    text-align: left;
-    text-decoration: none;
-    cursor: pointer;
-    font: inherit;
-    font-size: 0.9375em;
-    white-space: nowrap;
-}
-
-.share-picker-target:hover,
-.share-picker-copy:hover {
-    background-color: var(--color-base-200);
-}
-
-.share-picker-target:focus-visible,
-.share-picker-copy:focus-visible {
-    outline: 2px solid var(--lily-focus-ring);
-    outline-offset: -2px;
-}
-
-/* Absolutely positioned so its content never shifts layout — the status
-   region must stay in the DOM at all times (not display: none) or
-   assistive tech never hears the "Copied!" announcement. */
-.share-picker-status {
-    position: absolute;
-    right: 0;
-    top: 100%;
-    margin: 0.25rem 0 0;
-    padding: 0 0.1rem;
-    font-size: 0.8125em;
-    color: var(--lily-text-muted);
-    white-space: nowrap;
+    inset-inline-start: auto;
+    inset-inline-end: 0;
 }
 
 /* --- Narrow viewports ------------------------------------------------------ */
