@@ -1,11 +1,13 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import SkipLink from '$lib/lily/SkipLink.svelte';
-  import GrailLayout from '$lib/lily/GrailLayout.svelte';
-  import GrailLayoutTopHeader from '$lib/lily/GrailLayoutTopHeader.svelte';
-  import GrailLayoutCenterMain from '$lib/lily/GrailLayoutCenterMain.svelte';
-  import GrailLayoutBottomFooter from '$lib/lily/GrailLayoutBottomFooter.svelte';
-  import PickerBar from '$lib/helpers/PickerBar.svelte';
+  import {
+    SkipLink,
+    GrailLayout,
+    GrailLayoutTopHeader,
+    GrailLayoutCenterMain,
+    GrailLayoutBottomFooter
+  } from '@lilydesignsystem/svelte-headless';
+  import PickerBar from '@lilydesignsystem/svelte-picker-bar';
   import { SOURCE_REPO } from '$lib/book';
 
   let { children } = $props();

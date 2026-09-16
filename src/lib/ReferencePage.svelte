@@ -2,11 +2,13 @@
   // The glossary and the index are the same shape: a long A–Z document whose
   // `##` headings are single letters. Both get a sticky letter jump-bar so a
   // reader can reach "Q" without scrolling past everything before it.
-  import ArticleLayout from '$lib/lily/ArticleLayout.svelte';
-  import BreadcrumbNav from '$lib/lily/BreadcrumbNav.svelte';
-  import BreadcrumbList from '$lib/lily/BreadcrumbList.svelte';
-  import BreadcrumbListItem from '$lib/lily/BreadcrumbListItem.svelte';
-  import ContentsNav from '$lib/lily/ContentsNav.svelte';
+  import {
+    ArticleLayout,
+    BreadcrumbNav,
+    BreadcrumbList,
+    BreadcrumbListItem,
+    ContentsNav
+  } from '@lilydesignsystem/svelte-headless';
   import type { Document, Heading } from '$lib/markdown';
 
   let {

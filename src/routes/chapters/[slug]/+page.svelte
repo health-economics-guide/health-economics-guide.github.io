@@ -1,13 +1,15 @@
 <script lang="ts">
-  import ArticleLayout from '$lib/lily/ArticleLayout.svelte';
-  import BreadcrumbNav from '$lib/lily/BreadcrumbNav.svelte';
-  import BreadcrumbList from '$lib/lily/BreadcrumbList.svelte';
-  import BreadcrumbListItem from '$lib/lily/BreadcrumbListItem.svelte';
-  import PaginationNav from '$lib/lily/PaginationNav.svelte';
-  import PaginationList from '$lib/lily/PaginationList.svelte';
-  import PaginationListItem from '$lib/lily/PaginationListItem.svelte';
-  import ContentsNav from '$lib/lily/ContentsNav.svelte';
-  import ContentsLink from '$lib/lily/ContentsLink.svelte';
+  import {
+    ArticleLayout,
+    BreadcrumbNav,
+    BreadcrumbList,
+    BreadcrumbListItem,
+    PaginationNav,
+    PaginationList,
+    PaginationListItem,
+    ContentsNav,
+    ContentsLink
+  } from '@lilydesignsystem/svelte-headless';
   import { PARTS } from '$lib/book';
 
   let { data } = $props();

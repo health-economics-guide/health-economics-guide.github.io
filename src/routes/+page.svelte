@@ -1,7 +1,5 @@
 <script lang="ts">
-  import ArticleLayout from '$lib/lily/ArticleLayout.svelte';
-  import SectionHeading from '$lib/lily/SectionHeading.svelte';
-  import Badge from '$lib/lily/Badge.svelte';
+  import { ArticleLayout, SectionHeading, Badge } from '@lilydesignsystem/svelte-headless';
   import { PARTS, SOURCE_REPO, SKILLS_REPO } from '$lib/book';
 
   let { data } = $props();

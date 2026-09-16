@@ -1,9 +1,11 @@
 <script lang="ts">
-  import ArticleLayout from '$lib/lily/ArticleLayout.svelte';
-  import SectionHeading from '$lib/lily/SectionHeading.svelte';
-  import BreadcrumbNav from '$lib/lily/BreadcrumbNav.svelte';
-  import BreadcrumbList from '$lib/lily/BreadcrumbList.svelte';
-  import BreadcrumbListItem from '$lib/lily/BreadcrumbListItem.svelte';
+  import {
+    ArticleLayout,
+    SectionHeading,
+    BreadcrumbNav,
+    BreadcrumbList,
+    BreadcrumbListItem
+  } from '@lilydesignsystem/svelte-headless';
   import { PARTS } from '$lib/book';
 
   let { data } = $props();

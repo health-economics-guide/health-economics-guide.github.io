@@ -20,9 +20,7 @@ health-economics-guide.github.io/
 │   │   ├── book.ts               Part manifest and shared types (client-safe)
 │   │   ├── markdown.ts           Markdown to HTML, run at build time
 │   │   ├── ReferencePage.svelte  Shared layout for the glossary and the index
-│   │   ├── server/book.ts        Server-only: loads and parses the content
-│   │   ├── lily/                 Vendored Lily headless Svelte components
-│   │   └── helpers/              Vendored Lily PickerBar and its four pickers
+│   │   └── server/book.ts        Server-only: loads and parses the content
 │   └── routes/
 │       ├── +layout.svelte        Grail layout: header, reading column, footer
 │       ├── +page.svelte          Home
@@ -71,12 +69,12 @@ Chapters are discovered from the filenames, which carry the ordering (`03-07-ins
 
 ## Design
 
-The site uses the Lily Design System's Svelte headless components and its helper pickers, both vendored under `src/lib/`:
+The site uses the Lily Design System's Svelte packages from npm, under the `@lilydesignsystem/` org — nothing vendored except theme CSS (below):
 
-- **Components** from [`lily-design-system-svelte-headless`](https://github.com/LilyDesignSystem): `GrailLayout` and its header, main, and footer regions for the page frame, `ArticleLayout`, `ContentsNav`, `BreadcrumbNav`, `PaginationNav`, `SectionHeading`, `Card`, `Badge`, and `SkipLink`. They ship no CSS — every rule comes from the active theme plus `static/assets/style.css`.
-- **Helpers** from [`lily-design-system-svelte-helpers`](https://github.com/LilyDesignSystem): `PickerBar` in the header, composing `ThemePicker`, `LocalePicker`, `TextSizePicker`, and `SharePicker`. All three stateful pickers persist to `localStorage`; the theme picker also honours `prefers-color-scheme`, and the share picker offers copy-to-URL. The locale picker currently offers only English — it's wired up ready for translations, not doing anything yet.
+- **[`@lilydesignsystem/svelte-headless`](https://www.npmjs.com/package/@lilydesignsystem/svelte-headless)**: `GrailLayout` and its header, main, and footer regions for the page frame, `ArticleLayout`, `ContentsNav`, `BreadcrumbNav`, `PaginationNav`, `SectionHeading`, `Card`, `Badge`, and `SkipLink`. They ship no CSS — every rule comes from the active theme plus `static/assets/style.css`.
+- **[`@lilydesignsystem/svelte-picker-bar`](https://www.npmjs.com/package/@lilydesignsystem/svelte-picker-bar)**: `PickerBar` in the header, composing `ThemePicker`, `LocalePicker`, `TextSizePicker`, and `SharePicker` (each its own `@lilydesignsystem/svelte-*-picker` package, installed transitively). All three stateful pickers persist to `localStorage`; the theme picker also honours `prefers-color-scheme`, and the share picker offers copy-to-URL. The locale picker currently offers only English — it's wired up ready for translations, not doing anything yet.
 
-Readers can switch between all 45 Lily reference themes, including six NHS variants, UK Government Digital Service, and US Web Design System. Each theme file in `static/assets/themes/` is standalone: it declares its tokens and inlines the component CSS, so switching is a single stylesheet swap.
+Readers can switch between all 45 Lily reference themes, including six NHS variants, UK Government Digital Service, and US Web Design System. There is no published theme package, so `static/assets/themes/` stays a vendored copy of `lilydesignsystem/lily-design-system`'s `themes/` directory — refresh it by re-copying when it drifts. Each theme file is standalone: it declares its tokens and inlines the component CSS, so switching is a single stylesheet swap.
 
 Content rendering happens entirely at build time. `src/lib/server/book.ts` is server-only, so the prose never enters a client bundle; each page ships its own HTML and a shared ~200 KB of app JavaScript.
 

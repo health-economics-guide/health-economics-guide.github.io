@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import ArticleLayout from '$lib/lily/ArticleLayout.svelte';
+  import { ArticleLayout } from '@lilydesignsystem/svelte-headless';
 </script>
 
 <svelte:head>
