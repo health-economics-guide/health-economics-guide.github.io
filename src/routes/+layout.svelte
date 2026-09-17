@@ -34,6 +34,47 @@
     { href: '/glossary/', label: 'Glossary' },
     { href: '/index/', label: 'Index' }
   ];
+
+  // Read at share time (inside each href, not as a static prop), so it
+  // reflects whatever page is showing even after a client-side
+  // navigation the layout itself doesn't re-run for.
+  function pageTitle(): string {
+    return typeof document !== 'undefined' ? document.title : '';
+  }
+
+  const shareTargets = [
+    {
+      id: 'email',
+      label: 'Email Link',
+      href: (url: string) =>
+        `mailto:?subject=${encodeURIComponent(pageTitle())}&body=${encodeURIComponent(url)}`,
+      newTab: false
+    },
+    {
+      id: 'linkedin',
+      label: 'Share on LinkedIn',
+      href: (url: string) =>
+        `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`
+    },
+    {
+      id: 'reddit',
+      label: 'Share on Reddit',
+      href: (url: string) =>
+        `https://www.reddit.com/submit?url=${encodeURIComponent(url)}&title=${encodeURIComponent(pageTitle())}`
+    },
+    {
+      id: 'bluesky',
+      label: 'Share on Bluesky',
+      href: (url: string) =>
+        `https://bsky.app/intent/compose?text=${encodeURIComponent(`${pageTitle()} ${url}`)}`
+    },
+    {
+      id: 'mastodon',
+      label: 'Share on Mastodon',
+      href: (url: string) =>
+        `https://mastodonshare.com/?text=${encodeURIComponent(pageTitle())}&url=${encodeURIComponent(url)}`
+    }
+  ];
 </script>
 
 <SkipLink href="#main" label="Skip to main content" />
@@ -67,8 +108,9 @@
       locales={['en']}
       localeProps={{ storageKey: 'health-economics-guide-locale' }}
       textSizeProps={{ storageKey: 'health-economics-guide-text-size' }}
+      shareTargets={shareTargets}
       shareProps={{
-        copyLabel: 'Copy link',
+        copyLabel: 'Copy Link',
         copiedLabel: 'Copied!',
         copyFailedLabel: 'Copy failed — copy the address bar instead'
       }}
