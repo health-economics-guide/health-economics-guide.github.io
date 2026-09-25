@@ -11,12 +11,12 @@
 #
 # Requires Settings -> Pages -> Source to be set to "GitHub Actions".
 #
-# Triggers: push to this repo (e.g. editing this workflow), manual dispatch,
-# and a daily schedule as a safety net so the deployed site cannot drift far
-# behind the monorepo even if nothing else re-triggers a deploy. There is
-# deliberately no push trigger on the monorepo itself yet — wiring that up
-# needs a cross-repo token (the default GITHUB_TOKEN can't dispatch to
-# another repo), which is a deliberate follow-up, not done here.
+# Triggers: push to this repo (e.g. editing this workflow), manual dispatch
+# (used both by hand and by the monorepo's own trigger-site-deploy.yml,
+# which calls `gh workflow run` against this workflow_dispatch event
+# whenever health-economics-guide.github.io/ changes there — a PAT-backed
+# cross-repo call, since the default GITHUB_TOKEN can't reach another repo),
+# and a daily schedule as a backstop in case that dispatch is ever missed.
 
 name: Deploy to GitHub Pages
 
