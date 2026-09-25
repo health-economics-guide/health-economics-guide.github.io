@@ -1,14 +1,22 @@
-# Build the static site and publish it to GitHub Pages.
+# Build the book's site from the monorepo and publish it to GitHub Pages.
 #
-# Follows https://svelte.dev/docs/kit/adapter-static#GitHub-Pages, with one
-# deliberate difference: that example sets BASE_PATH to the repository name,
-# which is correct for a project site served from user.github.io/repo. This is
-# an organisation root site served from the domain root, so BASE_PATH stays
-# unset and `paths.base` resolves to '' — see svelte.config.js.
+# This repository no longer holds the site's source — see README.md. It
+# exists only because GitHub Pages serves the bare `health-economics-guide.
+# github.io` domain solely from a repository with that exact name; a repo
+# named `health-economics-guide` can only serve a project-page URL
+# (`.../health-economics-guide/`), not the org root. So this repo checks
+# out the monorepo, builds its nested `health-economics-guide.github.io/`
+# subdirectory, and deploys that — keeping the live URL stable while the
+# monorepo stays the actual source of truth.
 #
-# Requires Settings -> Pages -> Source to be set to "GitHub Actions". With the
-# default "Deploy from a branch", Jekyll publishes the README instead and this
-# workflow's artifact is built, uploaded, and then ignored.
+# Requires Settings -> Pages -> Source to be set to "GitHub Actions".
+#
+# Triggers: push to this repo (e.g. editing this workflow), manual dispatch,
+# and a daily schedule as a safety net so the deployed site cannot drift far
+# behind the monorepo even if nothing else re-triggers a deploy. There is
+# deliberately no push trigger on the monorepo itself yet — wiring that up
+# needs a cross-repo token (the default GITHUB_TOKEN can't dispatch to
+# another repo), which is a deliberate follow-up, not done here.
 
 name: Deploy to GitHub Pages
 
@@ -16,9 +24,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: '17 4 * * *'
 
-# Allow one concurrent deployment; queued runs supersede each other rather than
-# racing to publish different commits.
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -31,22 +39,33 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: monorepo/health-economics-guide.github.io
     steps:
-      - name: Checkout
+      - name: Checkout this repo (workflow only)
         uses: actions/checkout@v7
+
+      - name: Checkout the book monorepo
+        uses: actions/checkout@v7
+        with:
+          repository: health-economics-guide/health-economics-guide
+          path: monorepo
 
       # No `version` input: the action reads the exact pnpm from the
       # `packageManager` field in package.json, so CI and local development
-      # cannot drift onto different majors. They did once, and pnpm 11 rejected
-      # the build-script config that pnpm 10 had accepted.
+      # cannot drift onto different majors.
       - name: Install pnpm
         uses: pnpm/action-setup@v6
+        with:
+          package_json_file: monorepo/health-economics-guide.github.io/package.json
 
       - name: Install Node.js
         uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
+          cache-dependency-path: monorepo/health-economics-guide.github.io/pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -60,7 +79,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: build/
+          path: monorepo/health-economics-guide.github.io/build/
 
   deploy:
     needs: build
