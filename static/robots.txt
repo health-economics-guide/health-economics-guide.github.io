@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://health-economics-guide.github.io/sitemap.xml
