@@ -17,7 +17,7 @@
   const chapterCount = $derived(data.toc.filter((chapter) => chapter.part > 0).length);
   const t = $derived(ui(data.locale));
   const hero = $derived(HERO[data.locale] ?? HERO['en-001']);
-  const translations = ROUTABLE_LOCALE_SLUGS.filter((code) => code in ENDONYMS);
+  const translations = ROUTABLE_LOCALE_SLUGS.filter((code) => code.endsWith('-001') && code in ENDONYMS);
 </script>
 
 <svelte:head>
